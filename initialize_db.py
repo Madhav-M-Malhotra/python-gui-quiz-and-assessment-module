@@ -16,3 +16,9 @@ my_con.execute("Create table if not exists quiz_list(id varchar(20), result int,
 #Table : Answer Sheet
 #could fit a 385-500 words answer and 77-100 words feedback
 my_con.execute("Create table if not exists answer_sheet(id varchar(5), ans varchar(2500), marks int, feedback varchar(500))")
+
+#DataBase : Teacher
+my_con.execute("Create database if not exists teacher")
+my_con.execute("Use teacher")
+#Table : Quiz List
+my_con.execute("Create table if not exists quiz_list(id varchar(20))")
