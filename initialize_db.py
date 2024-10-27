@@ -35,3 +35,14 @@ my_con.execute("Create table if not exists question_paper(id varchar(5), que var
 my_con.execute("Create table if not exists sections_list(section int)")
 #Table : Student List
 my_con.execute("Create table if not exists student_list(id varchar(10), name varchar(50))")
+
+#DataBase : Retest
+my_con.execute("Create database if not exists retest")
+my_con.execute("Use retest")
+#Table : Quiz List
+my_con.execute("Create table if not exists quiz_list(id varchar(20), status varchar(10), duration int, start time, end time, passwd varchar(127), date date, marks int, sections varchar(5))")
+#Table : Question Paper
+#could fit a 385-500 words long question and each option could fit 46-60 words
+my_con.execute("Create table if not exists question_paper(id varchar(5), que varchar(1000), que_image longblob, a varchar(300), b varchar(300), c varchar(300), d varchar(300), marks int, ans varchar(4), grading_type varchar(10))")
+#Table : Student List
+my_con.execute("Create table if not exists student_list(id varchar(10), name varchar(50))")
