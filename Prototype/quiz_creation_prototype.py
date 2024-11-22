@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from PIL import Image
 import ctypes
 
 def new_quiz(course_code : str, exam_type : str, retest : bool):
