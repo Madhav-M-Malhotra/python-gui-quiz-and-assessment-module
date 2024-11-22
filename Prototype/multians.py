@@ -31,31 +31,35 @@ class MultiAns(MCQ):
         overall_type = ctk.CTkRadioButton(master=frame, text="Overall marking", variable=grading_type, value="Overall", font=("Agency FB", 25, 'bold'))
         overall_type.place(relx=0.837, rely=0.25)
 
-        # Create a StringVar to hold the selected option
-        selected_option = ctk.StringVar()
-        def on_option_selected():
-            print(f"Selected Option: {selected_option.get()}")  # Print the selected option
+        # Create BooleanVars for the checkboxes
+        checkbox1_var = ctk.BooleanVar()
+        checkbox2_var = ctk.BooleanVar()
+        checkbox3_var = ctk.BooleanVar()
+        checkbox4_var = ctk.BooleanVar()
+        # Function to handle checkbox state change
+        def on_checkbox_change():
+            print(f"Checkbox 1: {checkbox1_var.get()}, Checkbox 2: {checkbox2_var.get()}, Checkbox 3: {checkbox3_var.get()}, Checkbox 4: {checkbox4_var.get()}")
 
-        option1_button = ctk.CTkRadioButton(master=frame, text="a.", variable=selected_option, value="Option a", font=("Agency FB", 25, 'bold'), command=on_option_selected)
-        option1_button.place(relx=0.08, rely=0.5, relwidth=0.3, relheight=0.08)
+        option1_checkbox = ctk.CTkCheckBox(master=frame, text="a.", variable=checkbox1_var, font=("Agency FB", 25, 'bold'), command=on_checkbox_change)
+        option1_checkbox.place(relx=0.08, rely=0.5, relwidth=0.3, relheight=0.08)
 
         option1_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
         option1_textbox.place(relx=0.12, rely=0.5, relwidth=0.5, relheight=0.08)
 
-        option2_button = ctk.CTkRadioButton(master=frame, text="b.", variable=selected_option, value="Option b", font=("Agency FB", 25, 'bold'), command=on_option_selected)
-        option2_button.place(relx=0.08, rely=0.62, relwidth=0.3, relheight=0.08)
+        option2_checkbox = ctk.CTkCheckBox(master=frame, text="b.", variable=checkbox2_var, font=("Agency FB", 25, 'bold'), command=on_checkbox_change)
+        option2_checkbox.place(relx=0.08, rely=0.62, relwidth=0.3, relheight=0.08)
 
         option2_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
         option2_textbox.place(relx=0.12, rely=0.62, relwidth=0.5, relheight=0.08)
 
-        option3_button = ctk.CTkRadioButton(master=frame, text="c.", variable=selected_option, value="Option c", font=("Agency FB", 25, 'bold'), command=on_option_selected)
-        option3_button.place(relx=0.08, rely=0.74, relwidth=0.3, relheight=0.08)
+        option3_checkbox = ctk.CTkCheckBox(master=frame, text="c.", variable=checkbox3_var, font=("Agency FB", 25, 'bold'), command=on_checkbox_change)
+        option3_checkbox.place(relx=0.08, rely=0.74, relwidth=0.3, relheight=0.08)
 
         option3_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
         option3_textbox.place(relx=0.12, rely=0.74, relwidth=0.5, relheight=0.08)
 
-        option4_button = ctk.CTkRadioButton(master=frame, text="d.", variable=selected_option, value="Option d", font=("Agency FB", 25, 'bold'), command=on_option_selected)
-        option4_button.place(relx=0.08, rely=0.86, relwidth=0.3, relheight=0.08)
+        option4_checkbox = ctk.CTkCheckBox(master=frame, text="d.", variable=checkbox4_var, font=("Agency FB", 25, 'bold'), command=on_checkbox_change)
+        option4_checkbox.place(relx=0.08, rely=0.86, relwidth=0.3, relheight=0.08)
 
         option4_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
         option4_textbox.place(relx=0.12, rely=0.86, relwidth=0.5, relheight=0.08)

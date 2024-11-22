@@ -30,6 +30,7 @@ class MCQ(Que):
 
         # Create a StringVar to hold the selected option
         selected_option = ctk.StringVar()
+        # Function to handle option selection
         def on_option_selected():
             print(f"Selected Option: {selected_option.get()}")  # Print the selected option
 
