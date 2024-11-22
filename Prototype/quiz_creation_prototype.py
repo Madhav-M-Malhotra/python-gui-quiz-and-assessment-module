@@ -188,34 +188,65 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
 
     quiz.mainloop()
     
-# Create the main application window
-app = ctk.CTk()
-app.title("Course and Assessment Type")
-app.geometry("600x150")  # Same window size as before
+def app_win():
+    # Create the main application window
+    app = ctk.CTk()
+    app.title("Course and Assessment Type")
+    app.geometry("600x150")  # Same window size as before
 
-# Function to handle form submission
-def on_submit():
-    retest = retest_checkbox.get()
-    course_code = course_entry.get()
-    exam_type = dropdown.get()
-    app.destroy()  # Close the window after submission
-    new_quiz(course_code, exam_type, retest)
+    # Function to handle form submission
+    def on_submit():
+        retest = retest_checkbox.get()
+        course_code = course_entry.get()
+        exam_type = dropdown.get()
+        app.destroy()  # Close the window after submission
+        new_quiz(course_code, exam_type, retest)
 
-# Entry box for course code
-course_entry = ctk.CTkEntry(master=app, placeholder_text="Course Code", font=("Sans Serif", 20), width=200, height=35)
-course_entry.place(relx=0.05, rely=0.2)
+    # Entry box for course code
+    course_entry = ctk.CTkEntry(master=app, placeholder_text="Course Code", font=("Sans Serif", 20), width=200, height=35)
+    course_entry.place(relx=0.05, rely=0.2)
 
-# Dropdown for assessment types (initially blank, no user input allowed)
-dropdown = ctk.CTkComboBox(master=app, values=["MidSem", "EndSem", "ClassTest"], width=200, height=34, font=("Sans Serif", 20), state="readonly")
-dropdown.set("")  # Set initial value to blank
-dropdown.place(relx=0.415, rely=0.2)
+    # Dropdown for assessment types (initially blank, no user input allowed)
+    dropdown = ctk.CTkComboBox(master=app, values=["MidSem", "EndSem", "ClassTest"], width=200, height=34, font=("Sans Serif", 20), state="readonly")
+    dropdown.set("")  # Set initial value to blank
+    dropdown.place(relx=0.415, rely=0.2)
 
-retest_checkbox = ctk.CTkCheckBox(master=app, text="Retest", font=("Sans Serif", 25))
-retest_checkbox.place(relx=0.78, rely=0.22)
+    retest_checkbox = ctk.CTkCheckBox(master=app, text="Retest", font=("Sans Serif", 25))
+    retest_checkbox.place(relx=0.78, rely=0.22)
 
-# Submit button (next row)
-submit_button = ctk.CTkButton(master=app, text="Submit", font=("Agency FB", 25, 'bold'), command=on_submit, width=200, height=35)
-submit_button.place(relx=0.29, rely=0.6)  # Centered below entry and dropdown
+    # Submit button (next row)
+    submit_button = ctk.CTkButton(master=app, text="Submit", font=("Agency FB", 25, 'bold'), command=on_submit, width=200, height=35)
+    submit_button.place(relx=0.29, rely=0.6)  # Centered below entry and dropdown
 
-# Run the application
-app.mainloop()
+    # Run the application
+    app.mainloop()
+
+win = ctk.CTk()
+
+# Window settings
+win.title("MySQL Login")
+win.geometry("400x190")  # Set the window size to 400x180
+
+# Label with updated text
+label = ctk.CTkLabel(win, text="Enter your MySQL Password", font=("Arial", 20))
+label.pack(pady=10)
+
+# Wider entry box with larger font
+password_entry = ctk.CTkEntry(win, show="*", width=300, font=("Arial", 18), justify = "center")
+password_entry.pack(pady=10)
+
+# Login button with larger font
+login_button = ctk.CTkButton(win, text="Login", command=lambda:get_pass(), font=("Arial", 16))
+login_button.pack(pady=10)
+
+# Feedback label for connection errors
+feedback_label = ctk.CTkLabel(win, text="", font=("Arial", 16))
+feedback_label.pack(pady=10)  
+password = None
+def get_pass():
+    global password
+    password = password_entry.get()
+    win.destroy()
+    app_win()
+
+win.mainloop()
