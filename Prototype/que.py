@@ -15,8 +15,8 @@ class Que:
             question_textbox.insert("1.0",self.que)
 
         # Add a label for the question number to the left of the Textbox, aligned with the upper border
-        question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 60, "bold"), anchor="e")  # Background color white
-        question_label.place(relx=0.03, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
+        question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 50, "bold"), anchor="e")  # Background color white
+        question_label.place(relx=0.01, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
 
         # Create the square-shaped entry box for marks to the right of the question textbox
         marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)  # Width decreased

@@ -117,8 +117,8 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
     question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")  # Move slightly to the right
 
     # Add a label for the question number to the left of the Textbox, aligned with the upper border
-    question_label = ctk.CTkLabel(master=side_frame, text="Q1:", font=("Agency FB", 60, "bold"), anchor="e")  # Background color white
-    question_label.place(relx=0.03, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
+    question_label = ctk.CTkLabel(master=side_frame, text="Q1:", font=("Agency FB", 50, "bold"), anchor="e")  # Background color white
+    question_label.place(relx=0.01, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
 
     # Create the square-shaped entry box for marks to the right of the question textbox
     marks_entrybox = ctk.CTkEntry(master=side_frame, width=50, height=50, font=("Sans Serif", 20), justify="center")  # Width decreased
