@@ -3,13 +3,24 @@ import mysql.connector
 from que import Que
 
 class MCQ(Que):
-    def __init__(self, id: int):
-        super().__init__(id)
+    def __init__(self, id: int, db_connection, subject, exam, retest):
+        super().__init__(id, db_connection, subject, exam, retest)
         self.a = None
         self.b = None
         self.c = None
         self.d = None
         self.ans = None
+
+        my_con = db_connection.cursor()
+
+        if retest:
+            my_con.execute("Use retest")
+        else:
+            my_con.execute("Use '{}'".format(subject))
+    
+        my_con.execute("insert into '{}'(id) values({})".format(exam,"MCQ"+str(self.id)))
+
+        my_con.close()
     
     #overridng show
     def show(self, frame):

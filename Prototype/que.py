@@ -1,11 +1,28 @@
 import customtkinter as ctk
 import mysql.connector
+from mcq import MCQ
 
 class Que:
-    def __init__(self, id : int):
+    def __init__(self, id : int, db_connection, subject, exam, retest):
+        self.db_connection = db_connection
         self.id = id
         self.que = None
         self.marks = None
+        self.subject = subject
+        self.exam = exam
+        self.retest = retest
+
+        if not isinstance(self, MCQ):
+            my_con = db_connection.cursor()
+
+            if retest:
+                my_con.execute("Use retest")
+            else:
+                my_con.execute("Use '{}'".format(subject))
+        
+            my_con.execute("insert into '{}'(id) values({})".format(exam,"OEQ"+str(self.id)))
+
+            my_con.close()
     
     def show(self, frame):
         # Create the multi-line input Textbox for user to enter a question
@@ -25,17 +42,5 @@ class Que:
         marks_label = ctk.CTkLabel(master=frame, text="Marks:", font=("Agency FB", 39, "bold"), anchor="e")  # Background color white
         marks_label.place(relx=0.845, rely=0.0873, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
 
-    def set(self, password, subject, exam, retest):
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="root",  # Replace with actual username
-            password=password
-        )
-        my_con = connection.cursor()
-
-        if retest:
-            my_con.execute("Use retest")
-        else:
-            my_con.execute("Use '{}'".format(subject))
-        
-        my_con.execute("insert into '{}' values({},'{}',NULL,NULL,NULL,NULL,NULL,{},NULL,NULL)".format(exam,self.id,self.que,self.marks))
+    def set(self):
+        my_con = self.db_connection.cursor()

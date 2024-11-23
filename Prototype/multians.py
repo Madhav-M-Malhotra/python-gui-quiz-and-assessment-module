@@ -3,8 +3,8 @@ import mysql.connector
 from mcq import MCQ
 
 class MultiAns(MCQ):
-    def __init__(self, id: int):
-        super().__init__(id)
+    def __init__(self, id: int, db_connection, subject, exam, retest):
+        super().__init__(id, db_connection, subject, exam, retest)
         self.grading_type = None
     
     #overridng show
