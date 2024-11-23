@@ -21,6 +21,7 @@ class MCQ(Que):
         my_con = db_connection.cursor()
 
         if retest:
+            self.exam = subject+"_"+exam
             my_con.execute("Use retest")
         else:
             my_con.execute("Use '{}'".format(subject))

@@ -20,11 +20,12 @@ class Que:
             my_con = db_connection.cursor()
 
             if retest:
+                self.exam = subject+"_"+exam
                 my_con.execute("Use retest")
             else:
                 my_con.execute("Use '{}'".format(subject))
         
-            my_con.execute("insert into '{}'(id) values({})".format(exam,"OEQ"+str(self.id)))
+            my_con.execute("insert into '{}'(id) values({})".format(self.exam,"OEQ"+str(self.id)))
 
             my_con.close()
     
