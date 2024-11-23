@@ -1,6 +1,5 @@
 import customtkinter as ctk
 import mysql.connector
-from mcq import MCQ
 
 class Que:
     def __init__(self, id : int, db_connection, subject, exam, retest):
@@ -16,6 +15,7 @@ class Que:
         self.update_que = False
         self.update_marks = False
 
+        from mcq import MCQ
         if not isinstance(self, MCQ):
             my_con = db_connection.cursor()
 
@@ -23,9 +23,9 @@ class Que:
                 self.exam = subject+"_"+exam
                 my_con.execute("Use retest")
             else:
-                my_con.execute("Use '{}'".format(subject))
+                my_con.execute("Use `{}`".format(subject))
         
-            my_con.execute("insert into '{}'(id) values({})".format(self.exam,"OEQ"+str(self.id)))
+            my_con.execute("insert into `{}`(id) values('{}')".format(self.exam,"OEQ"+str(self.id)))
 
             my_con.close()
     
