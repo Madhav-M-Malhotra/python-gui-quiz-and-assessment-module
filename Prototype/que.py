@@ -12,6 +12,10 @@ class Que:
         self.exam = exam
         self.retest = retest
 
+        #flags for checking is the widget was edited
+        self.update_que = False
+        self.update_marks = False
+
         if not isinstance(self, MCQ):
             my_con = db_connection.cursor()
 
@@ -25,11 +29,18 @@ class Que:
             my_con.close()
     
     def show(self, frame):
+        #functions to set flag True
+        def que_edited():
+            self.update_que = True
+        def marks_edited():
+            self.update_marks = True
+
         # Create the multi-line input Textbox for user to enter a question
         question_textbox = ctk.CTkTextbox(master=frame, width=200, height=200, font=("Sans Serif", 20), border_width=2)  # Increased height
         question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")  # Move slightly to the right
         if self.que:
             question_textbox.insert("1.0",self.que)
+        question_textbox.bind("<KeyRelease>", que_edited)
 
         # Add a label for the question number to the left of the Textbox, aligned with the upper border
         question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 50, "bold"), anchor="e")  # Background color white
@@ -38,6 +49,7 @@ class Que:
         # Create the square-shaped entry box for marks to the right of the question textbox
         marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)  # Width decreased
         marks_entrybox.place(relx=0.945, rely=0.0873, anchor="center")  # Moved slightly to the left and up
+        marks_entrybox.bind("<KeyRelease>", marks_edited)
 
         marks_label = ctk.CTkLabel(master=frame, text="Marks:", font=("Agency FB", 39, "bold"), anchor="e")  # Background color white
         marks_label.place(relx=0.845, rely=0.0873, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
