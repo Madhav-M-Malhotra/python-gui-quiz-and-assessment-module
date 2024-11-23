@@ -60,9 +60,11 @@ class Que:
         if self.update_que:
             flag = True
             self.que = self.question_textbox.get("1.0", "end-1c")
+            self.update_que = False
         if self.update_marks:
             flag = True
             self.marks = int(self.marks_entrybox.get())
+            self.update_marks = False
         
         if flag:
             self.set()

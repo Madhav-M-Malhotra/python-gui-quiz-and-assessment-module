@@ -104,9 +104,11 @@ class MultiAns(MCQ):
         if self.update_que:
             flag = True
             self.que = self.question_textbox.get("1.0", "end-1c")
+            self.update_que = False
         if self.update_marks:
             flag = True
             self.marks = int(self.marks_entrybox.get())
+            self.update_marks = False
         
         if self.update_ans:
             flag = True
@@ -119,23 +121,29 @@ class MultiAns(MCQ):
                 self.ans += 'c'
             if self.checkbox4_var.get():
                 self.ans += 'd'
+            self.update_ans = False
         
         if self.update_option1:
             flag = True
             self.a = self.option1_textbox.get("1.0", "end-1c")
+            self.update_option1 = False
         if self.update_option2:
             flag = True
             self.b = self.option2_textbox.get("1.0", "end-1c")
+            self.update_option2 = False
         if self.update_option3:
             flag = True
             self.c = self.option3_textbox.get("1.0", "end-1c")
+            self.update_option3 = False
         if self.update_option4:
             flag = True
             self.d = self.option4_textbox.get("1.0", "end-1c")
+            self.update_option4 = False
         
         if self.update_grading_type:
             flag = True
             self.grading_type = self.selected_option.get()
+            self.update_grading_type = False
         
         if flag:
             self.set()
