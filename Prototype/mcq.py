@@ -48,62 +48,92 @@ class MCQ(Que):
             self.update_option4 = True
 
         # Create the multi-line input Textbox for user to enter a question
-        question_textbox = ctk.CTkTextbox(master=frame, width=200, height=200, font=("Sans Serif", 20), border_width=2)  # Increased height
-        question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")  # Move slightly to the right
+        self.question_textbox = ctk.CTkTextbox(master=frame, width=200, height=200, font=("Sans Serif", 20), border_width=2)  # Increased height
+        self.question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")  # Move slightly to the right
         if self.que:
-            question_textbox.insert("1.0",self.que)
-        question_textbox.bind("<KeyRelease>", que_edited)
+            self.question_textbox.insert("1.0",self.que)
+        self.question_textbox.bind("<KeyRelease>", que_edited)
 
         # Add a label for the question number to the left of the Textbox, aligned with the upper border
         question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 50, "bold"), anchor="e")  # Background color white
         question_label.place(relx=0.01, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
 
         # Create the square-shaped entry box for marks to the right of the question textbox
-        marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)  # Width decreased
-        marks_entrybox.place(relx=0.945, rely=0.0873, anchor="center")  # Moved slightly to the left and up
-        marks_entrybox.bind("<KeyRelease>", marks_edited)
+        self.marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)  # Width decreased
+        self.marks_entrybox.place(relx=0.945, rely=0.0873, anchor="center")  # Moved slightly to the left and up
+        self.marks_entrybox.bind("<KeyRelease>", marks_edited)
 
         marks_label = ctk.CTkLabel(master=frame, text="Marks:", font=("Agency FB", 39, "bold"), anchor="e")  # Background color white
         marks_label.place(relx=0.845, rely=0.0873, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
 
         # Create a StringVar to hold the selected option
-        selected_option = ctk.StringVar()
+        self.selected_option = ctk.StringVar()
 
-        option1_button = ctk.CTkRadioButton(master=frame, text="a.", variable=selected_option, value="Option a", font=("Agency FB", 25, 'bold'), command=ans_edited)
+        option1_button = ctk.CTkRadioButton(master=frame, text="a.", variable=self.selected_option, value="a", font=("Agency FB", 25, 'bold'), command=ans_edited)
         option1_button.place(relx=0.08, rely=0.5, relwidth=0.3, relheight=0.08)
 
-        option1_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
-        option1_textbox.place(relx=0.12, rely=0.5, relwidth=0.5, relheight=0.08)
+        self.option1_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
+        self.option1_textbox.place(relx=0.12, rely=0.5, relwidth=0.5, relheight=0.08)
         if self.a:
-            option1_textbox.insert("1.0",self.a)
-        option1_textbox.bind("<KeyRelease>", option1_edited)
+            self.option1_textbox.insert("1.0",self.a)
+        self.option1_textbox.bind("<KeyRelease>", option1_edited)
 
-        option2_button = ctk.CTkRadioButton(master=frame, text="b.", variable=selected_option, value="Option b", font=("Agency FB", 25, 'bold'), command=ans_edited)
+        option2_button = ctk.CTkRadioButton(master=frame, text="b.", variable=self.selected_option, value="b", font=("Agency FB", 25, 'bold'), command=ans_edited)
         option2_button.place(relx=0.08, rely=0.62, relwidth=0.3, relheight=0.08)
 
-        option2_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
-        option2_textbox.place(relx=0.12, rely=0.62, relwidth=0.5, relheight=0.08)
+        self.option2_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
+        self.option2_textbox.place(relx=0.12, rely=0.62, relwidth=0.5, relheight=0.08)
         if self.b:
-            option2_textbox.insert("1.0",self.b)
-        option2_textbox.bind("<KeyRelease>", option2_edited)
+            self.option2_textbox.insert("1.0",self.b)
+        self.option2_textbox.bind("<KeyRelease>", option2_edited)
 
-        option3_button = ctk.CTkRadioButton(master=frame, text="c.", variable=selected_option, value="Option c", font=("Agency FB", 25, 'bold'), command=ans_edited)
+        option3_button = ctk.CTkRadioButton(master=frame, text="c.", variable=self.selected_option, value="c", font=("Agency FB", 25, 'bold'), command=ans_edited)
         option3_button.place(relx=0.08, rely=0.74, relwidth=0.3, relheight=0.08)
 
-        option3_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
-        option3_textbox.place(relx=0.12, rely=0.74, relwidth=0.5, relheight=0.08)
+        self.option3_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
+        self.option3_textbox.place(relx=0.12, rely=0.74, relwidth=0.5, relheight=0.08)
         if self.c:
-            option3_textbox.insert("1.0",self.c)
-        option3_textbox.bind("<KeyRelease>", option3_edited)
+            self.option3_textbox.insert("1.0",self.c)
+        self.option3_textbox.bind("<KeyRelease>", option3_edited)
 
-        option4_button = ctk.CTkRadioButton(master=frame, text="d.", variable=selected_option, value="Option d", font=("Agency FB", 25, 'bold'), command=ans_edited)
+        option4_button = ctk.CTkRadioButton(master=frame, text="d.", variable=self.selected_option, value="d", font=("Agency FB", 25, 'bold'), command=ans_edited)
         option4_button.place(relx=0.08, rely=0.86, relwidth=0.3, relheight=0.08)
 
-        option4_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
-        option4_textbox.place(relx=0.12, rely=0.86, relwidth=0.5, relheight=0.08)
+        self.option4_textbox = ctk.CTkTextbox(master=frame, font=("Sans Serif", 18))
+        self.option4_textbox.place(relx=0.12, rely=0.86, relwidth=0.5, relheight=0.08)
         if self.d:
-            option4_textbox.insert("1.0",self.d)
-        option4_textbox.bind("<KeyRelease>", option4_edited)
+            self.option4_textbox.insert("1.0",self.d)
+        self.option4_textbox.bind("<KeyRelease>", option4_edited)
+
+    #overriding update
+    def update(self):
+        flag = False
+        if self.update_que:
+            flag = True
+            self.que = self.question_textbox.get("1.0", "end-1c")
+        if self.update_marks:
+            flag = True
+            self.marks = int(self.marks_entrybox.get())
+        
+        if self.update_ans:
+            flag = True
+            self.ans = self.selected_option.get()
+        
+        if self.update_option1:
+            flag = True
+            self.a = self.option1_textbox.get("1.0", "end-1c")
+        if self.update_option2:
+            flag = True
+            self.b = self.option2_textbox.get("1.0", "end-1c")
+        if self.update_option3:
+            flag = True
+            self.c = self.option3_textbox.get("1.0", "end-1c")
+        if self.update_option4:
+            flag = True
+            self.d = self.option4_textbox.get("1.0", "end-1c")
+        
+        if flag:
+            self.set()
 
     #overriding set
     def set(self):
