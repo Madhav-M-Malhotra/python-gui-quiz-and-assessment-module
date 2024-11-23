@@ -13,21 +13,21 @@ class MultiAns(MCQ):
     #overridng show
     def show(self, frame):
         #functions to set flag True
-        def que_edited():
+        def que_edited(*args):
             self.update_que = True
-        def marks_edited():
+        def marks_edited(*args):
             self.update_marks = True
-        def ans_edited():
+        def ans_edited(*args):
             self.update_ans = True
-        def option1_edited():
+        def option1_edited(*args):
             self.update_option1 = True
-        def option2_edited():
+        def option2_edited(*args):
             self.update_option2 = True
-        def option3_edited():
+        def option3_edited(*args):
             self.update_option3 = True
-        def option4_edited():
+        def option4_edited(*args):
             self.update_option4 = True
-        def grading_type_edited():
+        def grading_type_edited(*args):
             self.update_grading_type = True
 
         # Create the multi-line input Textbox for user to enter a question

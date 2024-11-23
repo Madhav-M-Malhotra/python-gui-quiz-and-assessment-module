@@ -31,9 +31,9 @@ class Que:
     
     def show(self, frame):
         #functions to set flag True
-        def que_edited():
+        def que_edited(*args):
             self.update_que = True
-        def marks_edited():
+        def marks_edited(*args):
             self.update_marks = True
 
         # Create the multi-line input Textbox for user to enter a question
