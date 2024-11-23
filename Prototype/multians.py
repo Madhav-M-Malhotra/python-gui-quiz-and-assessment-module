@@ -75,18 +75,15 @@ class MultiAns(MCQ):
             option4_textbox.insert("1.0",self.d)
 
     #overriding set
-    def set(self, password, subject, exam, retest):
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="root",  # Replace with actual username
-            password=password
-        )
-        my_con = connection.cursor()
+    def set(self):
+        my_con = self.db_connection.cursor()
 
-        if retest:
+        if self.retest:
             my_con.execute("Use retest")
         else:
-            my_con.execute("Use '{}'".format(subject))
+            my_con.execute("Use '{}'".format(self.subject))
         
-        my_con.execute("insert into '{}' values({},'{}',NULL,'{}','{}','{}','{}',{},'{}','{}')".format(exam,self.id,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type))
+        my_con.execute("update '{}' set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}', grading_type = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type,"OEQ"+str(self.id)))
+
+        my_con.close()
         

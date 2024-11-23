@@ -44,3 +44,12 @@ class Que:
 
     def set(self):
         my_con = self.db_connection.cursor()
+
+        if self.retest:
+            my_con.execute("Use retest")
+        else:
+            my_con.execute("Use '{}'".format(self.subject))
+        
+        my_con.execute("update '{}' set que = '{}', marks = {} where id = '{}'".format(self.exam,self.que,self.marks,"OEQ"+str(self.id)))
+
+        my_con.close()
