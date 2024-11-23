@@ -24,9 +24,9 @@ class MCQ(Que):
             self.exam = subject+"_"+exam
             my_con.execute("Use retest")
         else:
-            my_con.execute("Use '{}'".format(subject))
+            my_con.execute("Use `{}`".format(subject))
     
-        my_con.execute("insert into '{}'(id) values({})".format(exam,"MCQ"+str(self.id)))
+        my_con.execute("insert into `{}`(id) values('{}')".format(exam,"MCQ"+str(self.id)))
 
         my_con.close()
     
@@ -143,9 +143,9 @@ class MCQ(Que):
         if self.retest:
             my_con.execute("Use retest")
         else:
-            my_con.execute("Use '{}'".format(self.subject))
+            my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update '{}' set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"OEQ"+str(self.id)))
 
         my_con.close()
         

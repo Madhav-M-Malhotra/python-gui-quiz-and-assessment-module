@@ -147,9 +147,9 @@ class MultiAns(MCQ):
         if self.retest:
             my_con.execute("Use retest")
         else:
-            my_con.execute("Use '{}'".format(self.subject))
+            my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update '{}' set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}', grading_type = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}', grading_type = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type,"OEQ"+str(self.id)))
 
         my_con.close()
         
