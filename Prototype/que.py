@@ -75,6 +75,6 @@ class Que:
         else:
             my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update `{}` set que = '{}', marks = {} where id = '{}'".format(self.exam,self.que,self.marks,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = %s, marks = %s where id = %s".format(self.exam),(self.que,self.marks,"OEQ"+str(self.id)))
 
         my_con.close()

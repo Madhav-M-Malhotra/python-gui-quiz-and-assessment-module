@@ -145,7 +145,7 @@ class MCQ(Que):
         else:
             my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update `{}` set que = '{}', a = '{}', b = '{}', c = '{}', d = '{}', marks = {}, ans = '{}' where id = '{}'".format(self.exam,self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = %s, a = %s, b = %s, c = %s, d = %s, marks = %s, ans = %s where id = %s".format(self.exam),(self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"OEQ"+str(self.id)))
 
         my_con.close()
         
