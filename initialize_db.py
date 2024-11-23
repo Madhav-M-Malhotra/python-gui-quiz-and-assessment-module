@@ -2,29 +2,24 @@ import customtkinter as ctk
 import mysql.connector
 from mysql.connector import Error
 
-# Initialize CustomTkinter
-ctk.set_appearance_mode("light")  # Set to light mode for white color scheme
+ctk.set_appearance_mode("light")#Set to light mode for white color scheme
 ctk.set_default_color_theme("blue")
 
 win = ctk.CTk()
 
-# Window settings
 win.title("MySQL Login")
-win.geometry("400x190")  # Set the window size to 400x180
+win.geometry("400x190")
 
-# Label with updated text
 label = ctk.CTkLabel(win, text="Enter your MySQL Password", font=("Arial", 20))
 label.pack(pady=10)
 
-# Wider entry box with larger font
 password_entry = ctk.CTkEntry(win, show="*", width=300, font=("Arial", 18), justify = "center")
 password_entry.pack(pady=10)
 
-# Login button with larger font
 login_button = ctk.CTkButton(win, text="Login", command=lambda:connect_to_mysql(), font=("Arial", 16))
 login_button.pack(pady=10)
 
-# Feedback label for connection errors
+#Feedback label for connection errors
 feedback_label = ctk.CTkLabel(win, text="", font=("Arial", 16))
 feedback_label.pack(pady=10)  
 
@@ -32,10 +27,10 @@ def connect_to_mysql():
     password = password_entry.get()
 
     try:
-        # Attempt MySQL connection
+        #Attempt MySQL connection
         connection = mysql.connector.connect(
             host="localhost",
-            user="root",  # Replace with actual username
+            user="root",#Replace with your username
             password=password
         )
         if connection.is_connected():
@@ -110,13 +105,13 @@ def connect_to_mysql():
             my_con.execute("Create table if not exists student_list(id varchar(10), name varchar(50))")
             
             connection.commit()
-            connection.close()  # Close the connection if successful
+            connection.close()#Close the connection
             win.destroy()
     except Error as e:
-        # Handle connection errors (like incorrect password)
+        #Handle connection errors (like incorrect password)
         if e.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
             feedback_label.configure(text="Incorrect password. Please try again.", text_color="red")
-            password_entry.delete(0, ctk.END)  # Clear the password entry
+            password_entry.delete(0, ctk.END)#Clear the password entry
         else:
             feedback_label.configure(text="Connection failed. Check your details.", text_color="red")
 
