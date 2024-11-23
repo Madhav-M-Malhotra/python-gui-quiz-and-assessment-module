@@ -1,5 +1,4 @@
 import customtkinter as ctk
-import mysql.connector
 from que import Que
 
 class MCQ(Que):
@@ -115,7 +114,8 @@ class MCQ(Que):
             self.update_que = False
         if self.update_marks:
             flag = True
-            self.marks = int(self.marks_entrybox.get())
+            if self.marks_entrybox.get().isdigit():
+                self.marks = int(self.marks_entrybox.get())
             self.update_marks = False
         
         if self.update_ans:
