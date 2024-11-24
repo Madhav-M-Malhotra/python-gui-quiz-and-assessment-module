@@ -24,7 +24,7 @@ class Quiz:
             self.id = subject+"_"+exam
             my_con.execute("Use retest")
         else:
-            my_con.execute("insert into quiz_list values(%s)",(subject+"_"+exam))
+            my_con.execute("insert into quiz_list values('{}')".format(subject+"_"+exam))
             my_con.execute("Use `{}`".format(subject))
     
         my_con.execute("insert into quiz_list(id, status) values('{}', 'in making')".format(self.id))
