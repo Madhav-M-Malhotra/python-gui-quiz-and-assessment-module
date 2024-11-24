@@ -17,10 +17,14 @@ class Quiz:
 
         my_con = db_connection.cursor()
 
+        my_con.execute("Use `684237915`")
+
         if retest:
+            my_con.execute("insert into quiz_list values(%s)",("retest_"+subject+"_"+exam))
             self.id = subject+"_"+exam
             my_con.execute("Use retest")
         else:
+            my_con.execute("insert into quiz_list values(%s)",(subject+"_"+exam))
             my_con.execute("Use `{}`".format(subject))
     
         my_con.execute("insert into quiz_list(id, status) values('{}', 'in making')".format(self.id))
