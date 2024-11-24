@@ -1,4 +1,3 @@
-import mysql.connector
 from quelist import QueList
 
 class Quiz:
@@ -30,4 +29,18 @@ class Quiz:
         my_con.execute("insert into quiz_list(id, status) values('{}', 'in making')".format(self.id))
         my_con.execute("Create table `{}`(id varchar(5), que varchar(1000), a varchar(300), b varchar(300), c varchar(300), d varchar(300), marks int, ans varchar(4), grading_type varchar(10))".format(self.id))
 
+        self.db_connection.commit()
+        my_con.close()
+
+    def set(self):
+        my_con = self.db_connection.cursor()
+
+        if self.retest:
+            my_con.execute("Use retest")
+        else:
+            my_con.execute("Use `{}`".format(self.subject))
+    
+        my_con.execute("update quiz_list set passwd = %s, marks = %s where id = %s",(self.passwd,self.total_marks,self.id))
+
+        self.db_connection.commit()
         my_con.close()
