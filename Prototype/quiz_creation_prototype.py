@@ -290,28 +290,37 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
         if (curr_mcq is None) and (curr_oe is None):
             error_popup("",0)
             return
+        quiz.total_marks = 0
         while curr_mcq and curr_oe:
             if curr_mcq.que.ready_for_scheduling:
+                quiz.total_marks+=curr_mcq.que.marks
                 curr_mcq = curr_mcq.next
             else:
                 error_popup("MCQ",curr_mcq.que.id)
+                quiz.total_marks = None
                 return
             if curr_oe.que.ready_for_scheduling:
+                quiz.total_marks+=curr_oe.que.marks
                 curr_oe = curr_oe.next
             else:
                 error_popup("OEQ",curr_oe.que.id)
+                quiz.total_marks = None
                 return
         while curr_mcq:
             if curr_mcq.que.ready_for_scheduling:
+                quiz.total_marks+=curr_mcq.que.marks
                 curr_mcq = curr_mcq.next
             else:
                 error_popup("MCQ",curr_mcq.que.id)
+                quiz.total_marks = None
                 return
         while curr_oe:
             if curr_oe.que.ready_for_scheduling:
+                quiz.total_marks+=curr_oe.que.marks
                 curr_oe = curr_oe.next
             else:
                 error_popup("OEQ",curr_oe.que.id)
+                quiz.total_marks = None
                 return
 
     schedule_button = ctk.CTkButton(master=quiz_win, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), command=schedule)
