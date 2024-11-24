@@ -52,7 +52,7 @@ class MultiAns(MCQ):
         self.selected_option = ctk.StringVar()
         if self.grading_type:
             self.selected_option.set(self.grading_type)
-        option_type = ctk.CTkRadioButton(master=frame, text="Option-wise marking", variable=self.selected_option, value="Option-wise", font=("Agency FB", 25, 'bold'), command=grading_type_edited)
+        option_type = ctk.CTkRadioButton(master=frame, text="Option-wise marking", variable=self.selected_option, value="OptionWise", font=("Agency FB", 25, 'bold'), command=grading_type_edited)
         option_type.place(relx=0.837, rely=0.18)
         overall_type = ctk.CTkRadioButton(master=frame, text="Overall marking", variable=self.selected_option, value="Overall", font=("Agency FB", 25, 'bold'), command=grading_type_edited)
         overall_type.place(relx=0.837, rely=0.25)
@@ -170,7 +170,8 @@ class MultiAns(MCQ):
         else:
             my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update `{}` set que = %s, a = %s, b = %s, c = %s, d = %s, marks = %s, ans = %s, grading_type = %s where id = %s".format(self.exam),(self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = %s, a = %s, b = %s, c = %s, d = %s, marks = %s, ans = %s, grading_type = %s where id = %s".format(self.exam),(self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,self.grading_type,"MCQ"+str(self.id)))
 
+        self.db_connection.commit()
         my_con.close()
         

@@ -27,6 +27,7 @@ class MCQ(Que):
     
         my_con.execute("insert into `{}`(id) values('{}')".format(exam,"MCQ"+str(self.id)))
 
+        self.db_connection.commit()
         my_con.close()
     
     #overridng show
@@ -154,7 +155,8 @@ class MCQ(Que):
         else:
             my_con.execute("Use `{}`".format(self.subject))
         
-        my_con.execute("update `{}` set que = %s, a = %s, b = %s, c = %s, d = %s, marks = %s, ans = %s where id = %s".format(self.exam),(self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"OEQ"+str(self.id)))
+        my_con.execute("update `{}` set que = %s, a = %s, b = %s, c = %s, d = %s, marks = %s, ans = %s where id = %s".format(self.exam),(self.que,self.a,self.b,self.c,self.d,self.marks,self.ans,"MCQ"+str(self.id)))
 
+        self.db_connection.commit()
         my_con.close()
         
