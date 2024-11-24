@@ -2,7 +2,7 @@ import customtkinter as ctk
 import mysql.connector
 import ctypes
 import hashlib
-from quiz import QueList,Quiz
+from quiz import Quiz
 from que import Que
 from multians import MCQ,MultiAns
 
@@ -351,7 +351,7 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
                 show_pass_flag-=1
         
         show_button = ctk.CTkButton(popup,text='show',width=50,corner_radius=6,command=show_pass)
-        show_button.place(x=466,y=43)
+        show_button.place(x=467,y=43)
         
         def close_popup():
             if entrybox.get():
