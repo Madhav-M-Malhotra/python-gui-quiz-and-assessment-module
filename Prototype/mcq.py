@@ -68,6 +68,8 @@ class MCQ(Que):
 
         # Create a StringVar to hold the selected option
         self.selected_option = ctk.StringVar()
+        if self.ans:
+            self.selected_option.set(self.ans)
 
         option1_button = ctk.CTkRadioButton(master=frame, text="a.", variable=self.selected_option, value="a", font=("Agency FB", 25, 'bold'), command=ans_edited)
         option1_button.place(relx=0.08, rely=0.5, relwidth=0.3, relheight=0.08)

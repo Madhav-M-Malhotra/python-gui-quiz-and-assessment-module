@@ -50,6 +50,8 @@ class MultiAns(MCQ):
 
         #Grading Type
         self.selected_option = ctk.StringVar()
+        if self.grading_type:
+            self.selected_option.set(self.grading_type)
         option_type = ctk.CTkRadioButton(master=frame, text="Option-wise marking", variable=self.selected_option, value="Option-wise", font=("Agency FB", 25, 'bold'), command=grading_type_edited)
         option_type.place(relx=0.837, rely=0.18)
         overall_type = ctk.CTkRadioButton(master=frame, text="Overall marking", variable=self.selected_option, value="Overall", font=("Agency FB", 25, 'bold'), command=grading_type_edited)
@@ -60,6 +62,17 @@ class MultiAns(MCQ):
         self.checkbox2_var = ctk.BooleanVar()
         self.checkbox3_var = ctk.BooleanVar()
         self.checkbox4_var = ctk.BooleanVar()
+
+        if self.ans:
+            ans_hashset = set(self.ans)
+            if 'a' in ans_hashset:
+                self.checkbox1_var.set(True)
+            if 'b' in ans_hashset:
+                self.checkbox2_var.set(True)
+            if 'c' in ans_hashset:
+                self.checkbox3_var.set(True)
+            if 'd' in ans_hashset:
+                self.checkbox4_var.set(True)
         
         option1_checkbox = ctk.CTkCheckBox(master=frame, text="a.", variable=self.checkbox1_var, font=("Agency FB", 25, 'bold'), command=ans_edited)
         option1_checkbox.place(relx=0.08, rely=0.5, relwidth=0.3, relheight=0.08)
