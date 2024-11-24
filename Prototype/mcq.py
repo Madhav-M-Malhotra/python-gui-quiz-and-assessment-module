@@ -54,26 +54,23 @@ class MCQ(Que):
         def option4_edited(*args):
             self.update_option4 = True
 
-        # Create the multi-line input Textbox for user to enter a question
-        self.question_textbox = ctk.CTkTextbox(master=frame, width=200, height=200, font=("Sans Serif", 20), border_width=2)  # Increased height
-        self.question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")  # Move slightly to the right
+        self.question_textbox = ctk.CTkTextbox(master=frame, width=200, height=200, font=("Sans Serif", 20), border_width=2)
+        self.question_textbox.place(relx=0.455, rely=0.25, relwidth=0.75, relheight=0.4, anchor="center")
         if self.que:
             self.question_textbox.insert("1.0",self.que)
         self.question_textbox.bind("<KeyRelease>", que_edited)
 
-        # Add a label for the question number to the left of the Textbox, aligned with the upper border
-        question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 50, "bold"), anchor="e")  # Background color white
-        question_label.place(relx=0.01, rely=0.09, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
+        question_label = ctk.CTkLabel(master=frame, text="Q"+str(self.id)+":", font=("Agency FB", 50, "bold"), anchor="e")
+        question_label.place(relx=0.01, rely=0.09, anchor="w")
 
-        # Create the square-shaped entry box for marks to the right of the question textbox
-        self.marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)  # Width decreased
-        self.marks_entrybox.place(relx=0.945, rely=0.0873, anchor="center")  # Moved slightly to the left and up
+        self.marks_entrybox = ctk.CTkEntry(master=frame, width=50, height=50, font=("Sans Serif", 20), justify="center",placeholder_text=self.marks)
+        self.marks_entrybox.place(relx=0.945, rely=0.0873, anchor="center")
         self.marks_entrybox.bind("<KeyRelease>", marks_edited)
 
-        marks_label = ctk.CTkLabel(master=frame, text="Marks:", font=("Agency FB", 39, "bold"), anchor="e")  # Background color white
-        marks_label.place(relx=0.845, rely=0.0873, anchor="w")  # Moved slightly further down (rely adjusted to 0.09)
+        marks_label = ctk.CTkLabel(master=frame, text="Marks:", font=("Agency FB", 39, "bold"), anchor="e")
+        marks_label.place(relx=0.845, rely=0.0873, anchor="w")
 
-        # Create a StringVar to hold the selected option
+        #Create a StringVar to hold the selected option
         self.selected_option = ctk.StringVar()
         if self.ans:
             self.selected_option.set(self.ans)
