@@ -1,185 +1,310 @@
 import customtkinter as ctk
+import mysql.connector
 import ctypes
+from quiz import QueList,Quiz
+from que import Que
+from multians import MCQ,MultiAns
 
 def new_quiz(course_code : str, exam_type : str, retest : bool):
-    quiz = ctk.CTk()
-    quiz.title("Quiz Creation")
+    #settingup mysql connection
+    connection = mysql.connector.connect(
+            host="localhost",
+            user="root",#Replace with your username
+            password=password
+        )
 
-    quiz.update()  # Ensure window is fully initialized
+    quiz_win = ctk.CTk()
+    quiz_win.title("Quiz Creation")
+
+    quiz_win.update()#Ensure window is fully initialized
     hwnd = ctypes.windll.user32.GetForegroundWindow()
-    ctypes.windll.user32.ShowWindow(hwnd, 3)  # 3 = SW_MAXIMIZE in Windows API
+    ctypes.windll.user32.ShowWindow(hwnd, 3)#3 = SW_MAXIMIZE in Windows API
 
-    # Frame for the top bar (blue color, spans full width)
-    top_bar = ctk.CTkFrame(master=quiz, corner_radius=0, fg_color="#2C74B3")  # Blue color
-    top_bar.place(relx=0, rely=0, relwidth=1, relheight=0.05)  # Full width, 5% height of the window
+    #Frame for the top bar (blue color, spans full width)
+    top_bar = ctk.CTkFrame(master=quiz_win, corner_radius=0, fg_color="#2C74B3")
+    top_bar.place(relx=0, rely=0, relwidth=1, relheight=0.05)
 
     if exam_type == "ClassTest":
-        quiz_name = course_code+" Quiz-1"
+        exam_type = "Quiz_1"
+        quiz_name = course_code+" Quiz 1"
     else:
         quiz_name = course_code+" "+exam_type
     if retest:
         quiz_name+=" Retest"
     
-    # Add the label for the quiz name in the center of the top bar with white font color
+    quiz = Quiz(connection,course_code,exam_type,retest)
+    current_que = None
+
     quiz_name_label = ctk.CTkLabel(master=top_bar, text=quiz_name, font=("Agency FB", 28, "bold"), anchor="center", text_color="white")
     quiz_name_label.place(relx=0.5, rely=0.5, anchor="center")  # Centered in the top_bar
 
-    # Frame for the question list
-    que_list = ctk.CTkFrame(master=quiz, corner_radius=15, border_width=2, border_color='black')
-    que_list.place(relx=0.005, rely=0.06, relwidth=0.18, relheight=0.85)  # Adjusted rely to move frame up
+    #Frame for the question list
+    que_list = ctk.CTkFrame(master=quiz_win, corner_radius=15, border_width=2, border_color='black')
+    que_list.place(relx=0.005, rely=0.06, relwidth=0.18, relheight=0.85)
 
-    # New frame beside the que_list frame (taking the rest of the window width)
-    side_frame = ctk.CTkFrame(master=quiz, corner_radius=15, border_width=2, border_color='black')
-    side_frame.place(relx=0.19, rely=0.06, relwidth=0.805, relheight=0.85)  # Updated width to 0.805
+    #Frame for the questions
+    side_frame = ctk.CTkFrame(master=quiz_win, corner_radius=15, border_width=2, border_color='black')
+    side_frame.place(relx=0.19, rely=0.06, relwidth=0.805, relheight=0.85)
 
-    # Adjusted initial coordinates for button placement (in relative terms within que_list)
-    button_relx = 0.07  # Start more towards the left horizontally for first button of each row
-    button_rely = 0.09  # Adjusted to be slightly higher (tweaked from 0.08)
-    button_count = 1  # Counter to label new buttons
-    buttons_per_row = 5  # Maximum buttons in a row
+    #Adjusted initial coordinates for button placement (in relative terms within que_list)
+    button_relx = 0.07
+    button_rely = 0.09
+    button_count = 1#Counter to label new buttons
+    buttons_per_row = 5#Maximum buttons in a row
+    on_mcq_selection = False
 
-    # Coordinates for Open Ended Questions (OEQ) buttons
-    oeq_button_relx = 0.07  # Start horizontally for OEQ button
-    oeq_button_rely = 0.82  # Adjust this to place buttons below OEQ label
-    oeq_button_count = 1  # Counter to label new OEQ buttons
+    #Coordinates for Open Ended Questions (OEQ) buttons
+    oeq_button_relx = 0.07
+    oeq_button_rely = 0.82
+    oeq_button_count = 1#Counter to label new OEQ buttons
 
-    # Function to add a new question button (MCQ or OEQ)
-    def add_que():
-        nonlocal button_relx, button_rely, button_count
+    #function to clear the question from the frame
+    def clear_frame():
+        for widget in side_frame.winfo_children():
+            widget.destroy()
+
+    #Function to add a new MCQ
+    def add_mcq():        
+        nonlocal button_relx, button_rely, button_count, current_que, on_mcq_selection
         
-        # Create a new button with a unique label at the current coordinates
-        new_button = ctk.CTkButton(que_list, text=str(button_count), width=40, height=40)
-        new_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)  # Keep original button dimensions
+        if current_que:
+            current_que.que.update()
+            clear_frame()
         
-        # Move to the next position with increased horizontal spacing
-        if button_count < 45:  # Only shift the add_que_button until the 44th button
-            button_relx += 0.18  # Adjusted spacing for better centering
+        current_que = quiz.mcq.tail
+        if button_count == quiz.mcq.length+1:
+            #Create a new button with a unique label at the current coordinates
+            new_button = ctk.CTkButton(que_list, text=str(button_count), width=40, height=40)
+            new_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)
+            
+            #shift the add_mcq_button until the 44th button
+            if button_count < 45:
+                button_relx += 0.18
 
-        # Check if we've reached the maximum number of buttons in a row
-        if (button_count % buttons_per_row) == 0 and button_count < 45:  # Only shift position if we're below 45
-            button_relx = 0.07  # Reset x to start at the left edge for the next row
-            button_rely += 0.07  # Increase vertical spacing (adjusted to 0.07)
-        
-        # Move the '+' button to the new position if button count is less than 45
-        if button_count < 45:
-            add_que_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)  # Keep original button dimensions
-        
-        # Increment the label count for the new button
-        button_count += 1
+            #Check if we've reached the maximum number of buttons in a row
+            if (button_count % buttons_per_row) == 0 and button_count < 45:#Only shift position if we're below 45
+                button_relx = 0.07#Reset x to start at the left edge for the next row
+                button_rely += 0.07#Increase y
+            
+            #Move the '+' button to the new position if button count is less than 45
+            if button_count < 45:
+                add_mcq_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)
+            
+            #Increment the button count
+            button_count += 1
 
+        def new_mcq():
+            nonlocal current_que, on_mcq_selection
+            clear_frame()
+            quiz.mcq.add(MCQ(button_count-1,connection,course_code,exam_type,retest))
+            quiz.mcq.tail.que.show(side_frame)
+            current_que = quiz.mcq.tail
+            on_mcq_selection = False
+            
+        def new_multians():
+            nonlocal current_que, on_mcq_selection
+            clear_frame()
+            quiz.mcq.add(MultiAns(button_count-1,connection,course_code,exam_type,retest))
+            quiz.mcq.tail.que.show(side_frame)
+            current_que = quiz.mcq.tail
+            on_mcq_selection = False
 
-    # Function to add an Open Ended Question (OEQ) button
+        #choosing question type
+        single_answer = ctk.CTkButton(side_frame, text="Single-Answer", width=250, height=40, corner_radius=6, font=("Agency FB", 35, 'bold'), command=new_mcq)
+        single_answer.place(relx=0.475, rely=0.38, anchor="center")
+
+        or_label = ctk.CTkLabel(side_frame, text="OR", font=("Agency FB", 25, 'bold'))
+        or_label.place(relx=0.48, rely=0.475, anchor="center")
+
+        multi_answer = ctk.CTkButton(side_frame, text="Multi-Answer", width=250, height=40, corner_radius=6, font=("Agency FB", 35, 'bold'), command=new_multians)
+        multi_answer.place(relx=0.475, rely=0.58, anchor="center")
+
+        next_button.configure(state="disabled")
+        if current_que:
+                prev_button.configure(state="normal")
+        on_mcq_selection = True
+
+    #Function to add a new OEQ
     def add_oeq():
-        nonlocal oeq_button_relx, oeq_button_rely, oeq_button_count
+        nonlocal oeq_button_relx, oeq_button_rely, oeq_button_count, current_que, on_mcq_selection
         
-        # Create a new OEQ button at the current coordinates
+        if current_que:
+            current_que.que.update()
+        clear_frame()
+
+        #Create a new OEQ button at the current coordinates
         new_oeq_button = ctk.CTkButton(que_list, text=str(oeq_button_count), width=40, height=40)
         new_oeq_button.place(relx=oeq_button_relx, rely=oeq_button_rely, relwidth=0.13, relheight=0.05)
         
-        # Move to the next position for OEQ buttons
-        if oeq_button_count < 10:  # Only shift the add_oeq_button until the 9th button
-            oeq_button_relx += 0.18  # Adjusted spacing for OEQ button layout
+        #shift the add_oeq_button until the 9th button
+        if oeq_button_count < 10:
+            oeq_button_relx += 0.18
 
-        # Check if we've reached the maximum number of buttons in a row for OEQ buttons
-        if (oeq_button_count % buttons_per_row) == 0 and oeq_button_count < 10:  # Only shift position if we're below 10
-            oeq_button_relx = 0.07  # Reset x to start at the left edge for the next row
-            oeq_button_rely += 0.07  # Increase vertical spacing (adjusted to 0.07)
+        #Check if we've reached the maximum number of buttons in a row for OEQ buttons
+        if (oeq_button_count % buttons_per_row) == 0 and oeq_button_count < 10:#Only shift position if we're below 10
+            oeq_button_relx = 0.07#Reset x to start at the left edge for the next row
+            oeq_button_rely += 0.07#Increase y
         
-        # Move the '+' button to the new position if button count is less than 10
+        #Move the '+' button to the new position if button count is less than 10
         if oeq_button_count < 10:
             add_oeq_button.place(relx=oeq_button_relx, rely=oeq_button_rely, relwidth=0.13, relheight=0.05)
 
-        # Increment the label count for the new OEQ button
+        #adding question
+        quiz.oe.add(Que(oeq_button_count,connection,course_code,exam_type,retest))
+        quiz.oe.tail.que.show(side_frame)
+        current_que = quiz.oe.tail
+        on_mcq_selection = False
+
+        next_button.configure(state="disabled")
+        if current_que.prev:
+            prev_button.configure(state="normal")
+        else:
+            prev_button.configure(state="disabled")
+
+        #Increment oeq button count
         oeq_button_count += 1
 
-        
-        # Move the '+' button to the new position
-        add_oeq_button.place(relx=oeq_button_relx, rely=oeq_button_rely, relwidth=0.13, relheight=0.05)
+    def goto_mcqhead():
+        nonlocal current_que
+        if quiz.mcq.head:
+            if current_que != quiz.mcq.head:
+                current_que.que.update()
+                clear_frame()
+                current_que = quiz.mcq.head
+                current_que.que.show(side_frame)
+                prev_button.configure(state="disabled")
+                if button_count>2:
+                    next_button.configure(state="normal")
+        elif button_count == 2:
+            add_mcq()
 
-    # Create the initial '+' button for MCQs
-    add_que_button = ctk.CTkButton(master=que_list, text="+", corner_radius=6, fg_color="green", command=add_que)
-    add_que_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)  # Keep original button dimensions
+    def goto_oehead():
+        nonlocal current_que
+        if quiz.oe.head:
+            if current_que != quiz.oe.head:
+                if current_que:
+                    current_que.que.update()
+                clear_frame()
+                current_que = quiz.oe.head
+                current_que.que.show(side_frame)
+                prev_button.configure(state="disabled")
+                if current_que != quiz.oe.tail:
+                    next_button.configure(state="normal")
 
-    # Create the "Multiple Choice" label above the first row of buttons with updated width
+    #Create the initial '+' button for MCQs
+    add_mcq_button = ctk.CTkButton(master=que_list, text="+", corner_radius=6, fg_color="green", command=add_mcq)
+    add_mcq_button.place(relx=button_relx, rely=button_rely, relwidth=0.13, relheight=0.05)
+
     mcq_label = ctk.CTkLabel(master=que_list, text="Multiple Choice Questions", font=("Agency FB", 28, "bold"), anchor="center")
-    mcq_label.place(relx=0.05, rely=0.02, relwidth=0.9, relheight=0.05)  # Updated width to 0.9
+    mcq_label.place(relx=0.05, rely=0.02, relwidth=0.9, relheight=0.05)
+    mcq_label.bind('<Button>',lambda e:goto_mcqhead())
 
-    # Label for Open Ended Questions with updated relx to 0.02
     oeq_label = ctk.CTkLabel(master=que_list, text="Open Ended Questions", font=("Agency FB", 28, "bold"), anchor="center")
-    oeq_label.place(relx=0.02, rely=0.75, relwidth=0.85, relheight=0.05)  # Updated width to 0.85
+    oeq_label.place(relx=0.02, rely=0.75, relwidth=0.85, relheight=0.05)
+    oeq_label.bind('<Button>',lambda e:goto_oehead())
 
-    # Create the '+' button for Open Ended Questions below the OEQ label
+    #Create the '+' button for Open Ended Questions below the OEQ label
     add_oeq_button = ctk.CTkButton(master=que_list, text="+", corner_radius=6, fg_color="green", command=add_oeq)
-    add_oeq_button.place(relx=0.07, rely=0.82, relwidth=0.13, relheight=0.05)  # Positioned below OEQ label
+    add_oeq_button.place(relx=0.07, rely=0.82, relwidth=0.13, relheight=0.05)
 
-    prev_button = ctk.CTkButton(master=quiz, text="< Previous", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'))
+    def prev():
+        nonlocal current_que, on_mcq_selection
+
+        current_que.que.update()
+        clear_frame()
+    
+        if not on_mcq_selection:
+            current_que = current_que.prev
+        current_que.que.show(side_frame)
+        on_mcq_selection = False
+
+        next_button.configure(state="normal")
+        if current_que.prev:
+            prev_button.configure(state="normal")
+        else:
+            prev_button.configure(state="disabled")
+    
+    def next():
+        nonlocal current_que
+
+        current_que.que.update()
+        clear_frame()
+
+        if current_que == quiz.mcq.tail:
+            add_mcq()
+            return
+        current_que = current_que.next
+        current_que.que.show(side_frame)
+
+        prev_button.configure(state="normal")
+        if (current_que != quiz.oe.tail) and ((current_que != quiz.mcq.tail) or (button_count == quiz.mcq.length+2)):
+            next_button.configure(state="normal")
+        else:
+            next_button.configure(state="disabled")
+
+    prev_button = ctk.CTkButton(master=quiz_win, text="< Previous", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), state="disabled", command=prev)
     prev_button.place(relx=0.2, rely=0.93, relwidth=0.1, relheight=0.05)
 
-    next_button = ctk.CTkButton(master=quiz, text="Next >", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'))
+    next_button = ctk.CTkButton(master=quiz_win, text="Next >", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), state="disabled", command=next)
     next_button.place(relx=0.885, rely=0.93, relwidth=0.1, relheight=0.05)
 
-    schedule_button = ctk.CTkButton(master=quiz, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'))
+    schedule_button = ctk.CTkButton(master=quiz_win, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'))
     schedule_button.place(relx=0.52, rely=0.93, relwidth=0.1, relheight=0.05)
 
-    save_button = ctk.CTkButton(master=quiz, text="Save & Continue Later", width=200, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), command=quiz.destroy)
+    def save():
+        if current_que:
+            current_que.que.update()
+        quiz_win.destroy()
+
+    save_button = ctk.CTkButton(master=quiz_win, text="Save & Continue Later", width=200, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), command=save)
     save_button.place(relx=0.0135, rely=0.93, relwidth=0.16, relheight=0.05)
 
-    quiz.mainloop()
+    quiz_win.mainloop()
     
 def app_win():
-    # Create the main application window
     app = ctk.CTk()
     app.title("Course and Assessment Type")
-    app.geometry("600x150")  # Same window size as before
+    app.geometry("600x150")
 
-    # Function to handle form submission
+    #Function to handle form submission
     def on_submit():
         retest = retest_checkbox.get()
         course_code = course_entry.get()
         exam_type = dropdown.get()
-        app.destroy()  # Close the window after submission
+        app.destroy()#Close the window after submission
         new_quiz(course_code, exam_type, retest)
 
-    # Entry box for course code
+    #Entry box for course code
     course_entry = ctk.CTkEntry(master=app, placeholder_text="Course Code", font=("Sans Serif", 20), width=200, height=35)
     course_entry.place(relx=0.05, rely=0.2)
 
-    # Dropdown for assessment types (initially blank, no user input allowed)
+    #Dropdown for assessment types
     dropdown = ctk.CTkComboBox(master=app, values=["MidSem", "EndSem", "ClassTest"], width=200, height=34, font=("Sans Serif", 20), state="readonly")
-    dropdown.set("")  # Set initial value to blank
+    dropdown.set("")#Set initial value to blank
     dropdown.place(relx=0.415, rely=0.2)
 
     retest_checkbox = ctk.CTkCheckBox(master=app, text="Retest", font=("Sans Serif", 25))
     retest_checkbox.place(relx=0.78, rely=0.22)
 
-    # Submit button (next row)
     submit_button = ctk.CTkButton(master=app, text="Submit", font=("Agency FB", 25, 'bold'), command=on_submit, width=200, height=35)
-    submit_button.place(relx=0.29, rely=0.6)  # Centered below entry and dropdown
+    submit_button.place(relx=0.29, rely=0.6)
 
-    # Run the application
     app.mainloop()
 
 win = ctk.CTk()
 
-# Window settings
 win.title("MySQL Login")
-win.geometry("400x190")  # Set the window size to 400x180
+win.geometry("400x190")
 
-# Label with updated text
 label = ctk.CTkLabel(win, text="Enter your MySQL Password", font=("Arial", 20))
 label.pack(pady=10)
 
-# Wider entry box with larger font
 password_entry = ctk.CTkEntry(win, show="*", width=300, font=("Arial", 18), justify = "center")
 password_entry.pack(pady=10)
 
-# Login button with larger font
 login_button = ctk.CTkButton(win, text="Login", command=lambda:get_pass(), font=("Arial", 16))
 login_button.pack(pady=10)
 
-# Feedback label for connection errors
-feedback_label = ctk.CTkLabel(win, text="", font=("Arial", 16))
-feedback_label.pack(pady=10)  
 password = None
 def get_pass():
     global password
