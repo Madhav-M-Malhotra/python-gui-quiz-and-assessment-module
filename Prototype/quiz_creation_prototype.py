@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import mysql.connector
 import ctypes
+import hashlib
 from quiz import QueList,Quiz
 from que import Que
 from multians import MCQ,MultiAns
@@ -255,13 +256,13 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
             current_que.que.update()
 
         def error_popup(que_list,que):
-            # Create a pop-up window
+            #Create a pop-up window for showing error
             popup = ctk.CTkToplevel(quiz_win)
-            popup.geometry("590x150")  # Set the size of the pop-up
+            popup.geometry("590x150")#Set the size of the pop-up
             popup.title("Error")
-            popup.resizable(False, False)  # Prevent resizing
+            popup.resizable(False, False)#Prevent resizing
             
-            # Center the pop-up on the screen
+            #Center the pop-up on the screen
             x = (quiz_win.winfo_x() + quiz_win.winfo_width() // 2 - popup.winfo_width() // 2)
             y = (quiz_win.winfo_y() + quiz_win.winfo_height() // 2 - popup.winfo_height() // 2)
             popup.geometry(f"+{x}+{y}")
@@ -270,21 +271,21 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
                 message = "*ERROR : Quiz doesn't have any questions*"
             else:
                 message = "*ERROR : Incomplete data in "+que_list+" question "+str(que)+"*"
-            # Add an error message label
+            
             error_label = ctk.CTkLabel(popup, text=message, text_color="#D32F2F", font=("Sans Serif", 25, "bold"))
             error_label.pack(pady=20)
             
-            # Add an "OK" button
             def close_popup():
-                popup.destroy()  # Destroy the pop-up
+                popup.destroy()
 
             ok_button = ctk.CTkButton(popup, text="OK", font=("Agency FB", 25, 'bold'), command=close_popup)
             ok_button.pack(pady=10)
 
             popup.grab_set()
-            # Prevent interaction with the main window while the pop-up is open
-            popup.protocol("WM_DELETE_WINDOW", lambda: None)  # Disable close button on the pop-up
+            #Prevent interaction with the main window while the pop-up is open
+            popup.protocol("WM_DELETE_WINDOW", lambda: None)#Disable close button on the pop-up
 
+        #Checking if the quiz is ready to be scheduled
         curr_mcq = quiz.mcq.head
         curr_oe = quiz.oe.head
         if (curr_mcq is None) and (curr_oe is None):
@@ -322,6 +323,51 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
                 error_popup("OEQ",curr_oe.que.id)
                 quiz.total_marks = None
                 return
+        
+        #Create a pop-up window to get password
+        popup = ctk.CTkToplevel(quiz_win)
+        popup.geometry("590x150")
+        popup.title("Password")
+        popup.resizable(False, False)#Prevent resizing
+        
+        #Center the pop-up on the screen
+        x = (quiz_win.winfo_x() + quiz_win.winfo_width() // 2 - popup.winfo_width() // 2)
+        y = (quiz_win.winfo_y() + quiz_win.winfo_height() // 2 - popup.winfo_height() // 2)
+        popup.geometry(f"+{x}+{y}")
+        
+        entrybox = ctk.CTkEntry(master=popup, width=450, height=35, font=("Sans Serif", 20), justify="center",placeholder_text="Enter Password",show="*")
+        entrybox.place(x=70,y=40)
+
+        show_pass_flag = 0
+        def show_pass():
+            nonlocal show_pass_flag
+            if show_pass_flag==0:
+                entrybox.configure(show='')
+                show_button.configure(text='hide')
+                show_pass_flag+=1
+            else:
+                entrybox.configure(show='*')
+                show_button.configure(text='show')
+                show_pass_flag-=1
+        
+        show_button = ctk.CTkButton(popup,text='show',width=50,corner_radius=6,command=show_pass)
+        show_button.place(x=466,y=43)
+        
+        def close_popup():
+            if entrybox.get():
+                h=hashlib.new("SHA256")#creating SHA256 hash-object
+                h.update(entrybox.get().encode())#encoding the password
+                quiz.passwd=h.hexdigest()#storing in hexadecimal format
+                quiz.set()
+                popup.destroy()
+                quiz_win.destroy()
+
+        enter_button = ctk.CTkButton(popup, text="Enter", font=("Sans Serif", 20, 'bold'), command=close_popup)
+        enter_button.place(x=225,y=95)
+
+        popup.grab_set()
+        #Prevent interaction with the main window while the pop-up is open
+        popup.protocol("WM_DELETE_WINDOW", lambda: None)#Disable close button on the pop-up
 
     schedule_button = ctk.CTkButton(master=quiz_win, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), command=schedule)
     schedule_button.place(relx=0.52, rely=0.93, relwidth=0.1, relheight=0.05)
