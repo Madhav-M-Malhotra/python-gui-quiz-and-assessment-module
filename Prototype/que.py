@@ -26,6 +26,7 @@ class Que:
         
             my_con.execute("insert into `{}`(id) values('{}')".format(self.exam,"OEQ"+str(self.id)))
 
+            self.db_connection.commit()
             my_con.close()
     
     def show(self, frame):
@@ -79,4 +80,5 @@ class Que:
         
         my_con.execute("update `{}` set que = %s, marks = %s where id = %s".format(self.exam),(self.que,self.marks,"OEQ"+str(self.id)))
 
+        self.db_connection.commit()
         my_con.close()
