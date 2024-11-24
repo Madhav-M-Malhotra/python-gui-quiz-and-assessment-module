@@ -8,8 +8,14 @@ class MultiAns(MCQ):
 
         #flags for checking is the widget was edited
         self.update_grading_type = False
+
+    #overriding ready_for_scheduling
+    @property
+    def ready_for_scheduling(self):
+        if self.que and self.marks and self.ans and self.a and self.b and self.c and self.d and self.grading_type:
+            return True
     
-    #overridng show
+    #overriding show
     def show(self, frame):
         #functions to set flag True
         def que_edited(*args):
