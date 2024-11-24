@@ -28,6 +28,11 @@ class Que:
 
             self.db_connection.commit()
             my_con.close()
+
+    @property
+    def ready_for_scheduling(self):
+        if self.que and self.marks:
+            return True
     
     def show(self, frame):
         #functions to set flag True
