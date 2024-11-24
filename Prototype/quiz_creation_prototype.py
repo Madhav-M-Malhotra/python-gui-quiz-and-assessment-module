@@ -248,7 +248,73 @@ def new_quiz(course_code : str, exam_type : str, retest : bool):
     next_button = ctk.CTkButton(master=quiz_win, text="Next >", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), state="disabled", command=next)
     next_button.place(relx=0.885, rely=0.93, relwidth=0.1, relheight=0.05)
 
-    schedule_button = ctk.CTkButton(master=quiz_win, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'))
+    def schedule():
+        nonlocal exam_type, course_code, current_que
+
+        if current_que:
+            current_que.que.update()
+
+        def error_popup(que_list,que):
+            # Create a pop-up window
+            popup = ctk.CTkToplevel(quiz_win)
+            popup.geometry("590x150")  # Set the size of the pop-up
+            popup.title("Error")
+            popup.resizable(False, False)  # Prevent resizing
+            
+            # Center the pop-up on the screen
+            x = (quiz_win.winfo_x() + quiz_win.winfo_width() // 2 - popup.winfo_width() // 2)
+            y = (quiz_win.winfo_y() + quiz_win.winfo_height() // 2 - popup.winfo_height() // 2)
+            popup.geometry(f"+{x}+{y}")
+            
+            if que == 0:
+                message = "*ERROR : Quiz doesn't have any questions*"
+            else:
+                message = "*ERROR : Incomplete data in "+que_list+" question "+str(que)+"*"
+            # Add an error message label
+            error_label = ctk.CTkLabel(popup, text=message, text_color="#D32F2F", font=("Sans Serif", 25, "bold"))
+            error_label.pack(pady=20)
+            
+            # Add an "OK" button
+            def close_popup():
+                popup.destroy()  # Destroy the pop-up
+
+            ok_button = ctk.CTkButton(popup, text="OK", font=("Agency FB", 25, 'bold'), command=close_popup)
+            ok_button.pack(pady=10)
+
+            popup.grab_set()
+            # Prevent interaction with the main window while the pop-up is open
+            popup.protocol("WM_DELETE_WINDOW", lambda: None)  # Disable close button on the pop-up
+
+        curr_mcq = quiz.mcq.head
+        curr_oe = quiz.oe.head
+        if (curr_mcq is None) and (curr_oe is None):
+            error_popup("",0)
+            return
+        while curr_mcq and curr_oe:
+            if curr_mcq.que.ready_for_scheduling:
+                curr_mcq = curr_mcq.next
+            else:
+                error_popup("MCQ",curr_mcq.que.id)
+                return
+            if curr_oe.que.ready_for_scheduling:
+                curr_oe = curr_oe.next
+            else:
+                error_popup("OEQ",curr_oe.que.id)
+                return
+        while curr_mcq:
+            if curr_mcq.que.ready_for_scheduling:
+                curr_mcq = curr_mcq.next
+            else:
+                error_popup("MCQ",curr_mcq.que.id)
+                return
+        while curr_oe:
+            if curr_oe.que.ready_for_scheduling:
+                curr_oe = curr_oe.next
+            else:
+                error_popup("OEQ",curr_oe.que.id)
+                return
+
+    schedule_button = ctk.CTkButton(master=quiz_win, text="Schedule", width=100, height=40, corner_radius=6, fg_color="green", font=("Agency FB", 25, 'bold'), command=schedule)
     schedule_button.place(relx=0.52, rely=0.93, relwidth=0.1, relheight=0.05)
 
     def save():
