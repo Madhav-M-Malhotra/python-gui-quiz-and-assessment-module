@@ -81,8 +81,6 @@ This is a prototype of a Python-based GUI application for quiz and assessment ma
 |----------------------|-------------|-------------|
 | ![Quiz Setup](assets/quiz_setup.png) | ![MCQ View](assets/mcq_creator.png) | ![OEQ View](assets/oeq_creator.png) |
 
-> 💡 *To add screenshots, place images in the `/assets/` folder and update the file names above if needed.*
-
 ## 📌 Features Snapshot
 
 - ➕ Add up to **45 MCQs** and **10 OEQs**
