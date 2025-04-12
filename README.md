@@ -75,11 +75,15 @@ This is a prototype of a Python-based GUI application for quiz and assessment ma
 
 ## 📸 Screenshots (UI Preview)
 
-> 📷 *Below are sample screenshots from the current GUI interface:*
+Below are visuals from the quiz creation prototype as presented in the project report:
 
-| Quiz Setup Interface | MCQ Creator | OEQ Creator |
-|----------------------|-------------|-------------|
-| ![Quiz Setup](assets/quiz_setup.png) | ![MCQ View](assets/mcq_creator.png) | ![OEQ View](assets/oeq_creator.png) |
+| Quiz Metadata Entry | MCQ: Single Correct | MCQ: Multiple Correct |
+|---------------------|---------------------|------------------------|
+| ![Quiz Setup](assets/quiz_setup.png) | ![Single MCQ](assets/single_mcq.png) | ![Multi MCQ](assets/multi_mcq.png) |
+
+| Open-Ended Question | Password Prompt | MySQL Database View |
+|---------------------|------------------|----------------------|
+| ![OEQ](assets/oeq.png) | ![Password](assets/pwd.png) | ![Database](assets/dbms.png) |
 
 ## 📌 Features Snapshot
 
