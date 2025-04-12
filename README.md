@@ -77,7 +77,7 @@ This is a prototype of a Python-based GUI application for quiz and assessment ma
 
 Below are visuals from the quiz creation prototype as presented in the project report:
 
-| Quiz Metadata Entry | MCQ: Single Correct | MCQ: Multiple Correct |
+| Quiz Setup Interface | MCQ: Single Correct | MCQ: Multiple Correct |
 |---------------------|---------------------|------------------------|
 | ![Quiz Setup](assets/quiz_setup.png) | ![Single MCQ](assets/single_mcq.png) | ![Multi MCQ](assets/multi_mcq.png) |
 
