@@ -98,13 +98,18 @@ Below are visuals from the quiz creation prototype as presented in the project r
 
 ```
 📁 python-gui-quiz-and-assessment-module/
-├── main.py                # Entry point for GUI
-├── quiz.py                # Quiz class definition
-├── que.py                 # Base question class
-├── mcq.py                 # MCQ & MultiAns classes
-├── quelist.py             # Doubly Linked List logic
-├── assets/                # Images/screenshots folder
-└── README.md              # You're reading it!
+├── assets/                         # Screenshots and resources (images, if any)
+├── initialize_db.py                # Script to initialize the MySQL database
+├── LICENSE                         # Apache 2.0 License
+├── README.md                       # Project documentation (this file)
+└── prototype/                      # Main application code
+    ├── quiz_creation_prototype.py  # Entry point for the Quiz Creation GUI
+    ├── quiz_creation_gui.py        # Quiz Creation win design
+    ├── mcq.py                      # MCQ class (single correct)
+    ├── multians.py                 # MultiAns class (multiple correct)
+    ├── que.py                      # Base Question class for open-ended questions
+    ├── quelist.py                  # Doubly Linked List structure for Que navigation
+    └── quiz.py                     # Quiz class (holds metadata, MCQ/OEQ lists)
 ```
 
 ## 📃 License
