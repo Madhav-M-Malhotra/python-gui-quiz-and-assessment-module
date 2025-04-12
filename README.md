@@ -41,9 +41,14 @@ This is a prototype of a Python-based GUI application for quiz and assessment ma
    pip install customtkinter mysql-connector-python
    ```
 
-4. **Run the app**:
+4. **Initialize Database**:
    ```bash
-   python main.py
+   python initialize_db.py
+   ```
+
+5. **Run the app**:
+   ```bash
+   python quiz_creation_prototype.py
    ```
 
 ## 🧠 Architecture Overview
