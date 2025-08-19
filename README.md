@@ -2,11 +2,6 @@
 
 This is a prototype of a Python-based GUI application for quiz and assessment management. The current version includes only the **quiz creation** module — allowing professors to build quizzes with multiple-choice and open-ended questions.
 
-## 🚧 Project Status
-
-> 🛠️ **Prototype Stage**  
-> This version focuses only on the **quiz creation** module. Features like quiz-taking, grading, and analytics will be added in future iterations.
-
 ## ✨ Key Highlights
 
 - 🧱 **Clean OOP Architecture**: Modular class-based design with inheritance for different question types.
